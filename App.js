@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, KeyboardAvoidingView, Platform} from 'react-native';
-import DateHead from './components/DateHead';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+
+import DateHead from './components/DateHead';
 import AddTodo from './components/AddTodo';
 import Empty from './components/Empty';
 import TodoList from './components/TodoList';
+import todosStorage from './storages/todosStorage';
 
 function App() {
   const today = new Date();
@@ -13,6 +15,14 @@ function App() {
     {id: 2, text: '리액트 네이티브 기초 공부', done: false},
     {id: 3, text: '작업환경 설정', done: false},
   ]);
+  // 불러오기
+  useEffect(() => {
+    todosStorage.get().then(setTodos).catch(console.error);
+  }, []);
+  // 저장
+  useEffect(() => {
+    todosStorage.set(todos).catch(console.error);
+  }, [todos]);
   const onInsert = text => {
     // 새로 등록할 항목의 id를 구한다.
     // 등록된 항목 중에서 가장 큰 id를 구하고, 그 값에 1을 더한다.
@@ -41,6 +51,7 @@ function App() {
     const nextTodos = todos.filter(todo => todo.id !== id);
     setTodos(nextTodos);
   };
+
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={['bottom']} style={styles.block}>
