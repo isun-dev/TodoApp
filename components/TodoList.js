@@ -11,6 +11,7 @@ function TodoList({todos}) {
         <TodoItem id={item.id} text={item.text} done={item.done} />
       )}
       keyExtractor={item => item.id.toString()}
+      ItemSeparatorComponent={() => <View style={styles.separator} />}
     />
   );
 }
@@ -18,6 +19,10 @@ function TodoList({todos}) {
 const styles = StyleSheet.create({
   list: {
     flex: 1,
+  },
+  separator: {
+    backgroundColor: '#e0e0e0',
+    height: 1,
   },
 });
 
